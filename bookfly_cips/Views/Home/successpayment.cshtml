@@ -1,0 +1,26 @@
+﻿
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Success Payment View</h1>
+
+    <form id="validateForm" action="Request" method="post">
+        <button id="validateButton" type="submit">Validate</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            // Automatically trigger the form submission when the page loads
+            $("#validateForm").submit();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+﻿
+ @{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connect IPS Payment Form</title>
+</head>
+<body>
+    <p>Token has been generated. Please press proceed to move ahead!!!</p>
+    <form id="paymentForm" action="https://uat.connectips.com/connectipswebgw/loginpage" method="post" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="MERCHANTID" id="merchantid" value="@ViewBag.Merchantid" required />
+        <input type="hidden" name="APPID" id="appid" value="@ViewBag.Appid" required />
+        <input type="hidden" name="APPNAME" id="appname" value="@ViewBag.Appname" required />
+        <input type="hidden" name="TXNID" id="txnid" value="@ViewBag.Txnid" required />
+        <input type="hidden" name="TXNDATE" id="txndate" value="@ViewBag.Txndate" required />
+        <input type="hidden" name="TXNCRNCY" id="txncrncy" value="@ViewBag.Txncrncy" required />
+        <input type="hidden" name="TXNAMT" id="txnamt" value="@ViewBag.Txnamt" required />
+        <input type="hidden" name="REFERENCEID" id="referenceid" value="@ViewBag.Referenceid" required />
+        <input type="hidden" name="REMARKS" id="remarks" value="@ViewBag.Remarks" required />
+        <input type="hidden" name="PARTICULARS" id="particulars" value="@ViewBag.Particulars" required />
+        <input type="hidden" name="TOKEN" id="token" value="@ViewBag.Token" required />
+        <button type="submit" id="proceedButton">Proceed</button>
+    </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("proceedButton").click();
+        });
+    </script>
+</body>
+</html>
+
+
+
+        
