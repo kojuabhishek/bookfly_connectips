@@ -13,22 +13,14 @@
     <p>Please enter details to generate token: </p>
     <form id="paymentForm" action="Home/Index" method="post">
         <label for="amount">TXNAMT:</label>
-        <input type="text" name="txnamt" id="txnamt"  required />
+        <input type="text" name="txnamt" id="txnamt" pattern="[0-9]*" required />
         <label for="amount">REMARKS:</label>
-        <input type="text" name="remarks" id="remarks"  required />
+        <input type="text" name="remarks" id="remarks" required />
         <label for="amount">PARTICULARS:</label>
-        <input type="text" name="particulars" id="particulars"  required />
+        <input type="text" name="particulars" id="particulars" required />
         <input type="hidden" name="x" value="1" />
-
 
         <button type="submit">Generate Token</button>
     </form>
-@*
-    <form id="validateForm" action="Home/Validate">
-        <button type="submit">Validate</button>
-        
-    </form>*@
-
-
 </body>
 </html>

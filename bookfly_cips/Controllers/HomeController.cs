@@ -35,7 +35,7 @@ namespace bookfly_cips.Controllers
         {
             try
             {
-                string Filename = "E:\\ConnectIPS\\Documents\\Creditor.pfx";
+                string Filename = "E:\\ConnectIPS\\Documents\\Creditor.pfx";     //location of creditor.pfx key
                 using (var crypt = new SHA256Managed())
                 using (var cert = new X509Certificate2(Filename, pfxPassword, X509KeyStorageFlags.Exportable))
                 {
@@ -84,20 +84,36 @@ namespace bookfly_cips.Controllers
                 DateTime currentDate = DateTime.Now;
                 string TXNDATE = currentDate.ToString("dd-MM-yyyy");
 
+                
+                //Must be integer according to documentation
                 string TXNCRNCY = "NPR";
                 float TXNAMT = txnamt;
 
+                
+                
+                
+                
                 string validateTxnAmt = TXNAMT.ToString();
-                string validateTxnAmtModified = validateTxnAmt + ".00";
+                string validateTxnAmtModified = validateTxnAmt + ".00"; 
+
+                
+
+            
+
 
                 string REFERENCEID = "ref-" + guidString;
                 string REMARKS = remarks;
                 string PARTICULARS = particulars;
 
+               
+                //First token generation for transaction initiation
                 string stringToHash = "MERCHANTID=" + MERCHANTID.ToString() + "," + "APPID=" + APPID + "," + "APPNAME=" + APPNAME + "," + "TXNID=" + TXNID + "," + "TXNDATE=" + TXNDATE + "," + "TXNCRNCY=" + TXNCRNCY + "," + "TXNAMT=" + TXNAMT.ToString() + "," + "REFERENCEID=" + REFERENCEID + "," + "REMARKS=" + REMARKS + "," + "PARTICULARS=" + PARTICULARS + "," + "TOKEN=TOKEN";
 
+                Console.WriteLine("String to Hash : ",stringToHash);
                 string convertedtoken = GenerateConnectIPSToken(stringToHash, pfxPassword);
 
+                
+                //For validation token generation
                 string validateStringToHash = "MERCHANTID=1043" + "," + "APPID=MER-1043-APP-1" + "," + "REFERENCEID=" + TXNID + "," + "TXNAMT=" + validateTxnAmtModified;
                 string validateToken = GenerateConnectIPSToken(validateStringToHash, "123");
 
@@ -131,13 +147,19 @@ namespace bookfly_cips.Controllers
             }
         }
 
+        
+        //Validating and getting txndetail request to api
         [HttpPost]
         public async Task<IActionResult> Request()
         {
             string username = "MER-1043-APP-1";
             string password = "Abcd@123";
+
+            //validate txndetail api
             string apiUrl = "https://uat.connectips.com/connectipswebws/api/creditor/validatetxn";
 
+            
+            //get txndetail api
             string apiUrl1 = "https://uat.connectips.com/connectipswebws/api/creditor/gettxndetail";
            
 
@@ -147,8 +169,7 @@ namespace bookfly_cips.Controllers
 
             string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-            //Console.WriteLine("Header#### "+(_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials)).ToString());
-
+            
     
           
 
@@ -176,19 +197,18 @@ namespace bookfly_cips.Controllers
 
             if (txnvalResponse.IsSuccessStatusCode)
             {
-                /*  string responseContent = await response.Content.ReadAsStringAsync();
-                  Console.WriteLine(responseContent);
-                  ViewBag.response = responseContent;
-
-                  return View("Details");
-  */
+               
                 string txnvalresponseContent = await txnvalResponse.Content.ReadAsStringAsync();
                 var txnvalresponseObject = JsonSerializer.Deserialize<dynamic>(txnvalresponseContent);
-                ViewBag.validationResponse = txnvalresponseObject;
+               ViewBag.validationResponse = txnvalresponseObject;
+             
 
                 string txndetailresponseContent = await txndetailResponse.Content.ReadAsStringAsync();
                 var txndetailresponseObject = JsonSerializer.Deserialize<dynamic>(txndetailresponseContent);
+               
                 ViewBag.txndetailResponse = txndetailresponseObject;
+               
+
 
                 return View("Details");
             }
@@ -205,12 +225,14 @@ namespace bookfly_cips.Controllers
 
       
 
-    public IActionResult successpayment()
+    //SuccessURL
+        
+        public IActionResult successpayment()
         {
 
             
             return View();
-            // return RedirectToAction("Request");
+           ;
 
            
         }
@@ -220,7 +242,7 @@ namespace bookfly_cips.Controllers
         
 
 
-
+        //FailureURl
         public IActionResult failedpayment()
         {
             return View();
